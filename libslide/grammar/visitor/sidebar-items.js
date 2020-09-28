@@ -1,1 +1,1 @@
-initSidebarItems({"trait":[["ExprPatVisitor","Describes an [expression pattern][super::ExprPat] visitor."],["StmtVisitor","Describes a [statement list][super::StmtList] visitor."]]});
+initSidebarItems({"trait":[["ExprPatVisitor","Describes an expression pattern visitor."],["StmtVisitor","Describes a statement list visitor."]]});

@@ -6,7 +6,7 @@
 <a href="VariableExpander::finish"><code>finish</code></a> is called, and does not expand variables within an expanded
 variable definition.</p>
 <p>For example, <code>&quot;a + b&quot;.expand(&quot;a = b + 1&quot;).expand(&quot;b = c&quot;)</code> would expand to <code>&quot;b + 1 + c&quot;</code>.
-Compare this to an [<code>EagerVariableExpander</code>][EagerVariableExpander].</p>
+Compare this to an <a href="self::EagerVariableExpander"><code>EagerVariableExpander</code></a>.</p>
 <p>Furthermore, the variable definition used by a <code>LazyVariableExpander</code> is the last one given via
 <a href="VariableExpander::expand"><code>expand</code></a>.</p>
 <p>For example, <code>&quot;a + a&quot;.expand(&quot;a = 1&quot;).expand(&quot;a = 10&quot;)</code> would expand to <code>&quot;10 + 10&quot;</code>.</p>

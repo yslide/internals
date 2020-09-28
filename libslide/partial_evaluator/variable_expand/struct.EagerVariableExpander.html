@@ -5,7 +5,7 @@
 <p>An <code>EagerVariableExpander</code> expands all matching variables on every call to
 <a href="VariableExpander::expand"><code>expand</code></a>.</p>
 <p>For example, <code>&quot;a + b&quot;.expand(&quot;a = b + 1&quot;).expand(&quot;b = c&quot;)</code> would expand to <code>&quot;c + 1 + c&quot;</code>.
-Compare this to a [<code>LazyVariableExpander</code>][LazyVariableExpander].</p>
+Compare this to a <a href="self::LazyVariableExpander"><code>LazyVariableExpander</code></a>.</p>
 <p>Note, however, that an <code>EagerVariableExpander</code> will not try to expand variables within an
 expanded variable definition on the same call to <a href="VariableExpander::expand"><code>expand</code></a>.</p>
 <p>For example, <code>&quot;a&quot;.expand(&quot;a = a + a&quot;)</code> would expand to <code>&quot;a + a&quot;</code> rather than
