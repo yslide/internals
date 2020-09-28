@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["add",""],["divide",""],["exponentiate",""],["modulo",""],["multiply",""],["negate",""],["posate",""],["subtract",""]]});

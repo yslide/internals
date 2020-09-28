@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["term_and_pow_from_expr","Gets the term and power of an expression. Returns None if the power is not a positive integer."]],"struct":[["Poly","A polynomial in integer space Z. TODO: Currently, this container only services polynomials with non-negative degrees."]]});

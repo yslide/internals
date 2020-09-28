@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["IncompatibleDefinitions","This error is fired on variable definitions provided to a slide program that can never be compatible. For example, given the program"],["MaybeIncompatibleDefinitions","This warning is fired on variable definitions that may be incompatible. For example, given the program"],["PartialEvaluatorErrors",""]]});

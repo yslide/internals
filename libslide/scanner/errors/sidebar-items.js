@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["InvalidToken","Tokens in a slide program must be mathematically significant. In particular, slide uses a subset of canonical mathematical notation to represent expressions."],["ScanErrors","Diagnostic errors produced by the scanner."]]});

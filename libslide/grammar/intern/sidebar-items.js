@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["EMPTY_STR","A static reference to an empty string."],["INTERNED_STRS","Arena of interned strings."],["InternedStr","An interned [String][std::string::String] type."],["RcExpr","An interned version of an expression."],["RcExprPat","An interned version of an expression."]],"trait":[["RcExpression","Describes a reference-counted slide expression."]]});

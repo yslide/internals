@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["ExpressionTransformer","A trait for transforming one expression into another."],["Transformer","A trait for transforming one grammar into another. This transformer takes ownership of the grammar it transforms."]]});

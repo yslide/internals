@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["UnbuiltRule","An unbuilt rule, generally used to express a rule in a human-readable form."]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"static":[["DUMMY_SP","A dummy span for use in places where a span is not (yet) known."]],"struct":[["ProgramContext","A context for evaluating a slide program."],["Span","Describes the character span of a substring in a text."]]});

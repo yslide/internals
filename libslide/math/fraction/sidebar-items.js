@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["dec2frac","Converts a decimal number to its irreducible fractional representation by walking the Stern-Brocot tree. This is equivalent to a binary search of the Farey sequence."]],"struct":[["Dec2FracError",""]],"type":[["Fraction","Represents a fraction, consisting of a numerator and denominator."]]});

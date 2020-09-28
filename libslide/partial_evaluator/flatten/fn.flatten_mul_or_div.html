@@ -1,0 +1,143 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `flatten_mul_or_div` fn in crate `libslide`."><meta name="keywords" content="rust, rustlang, rust-lang, flatten_mul_or_div"><title>libslide::partial_evaluator::flatten::flatten_mul_or_div - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc fn"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../libslide/index.html'><div class='logo-container'><img src='https://avatars2.githubusercontent.com/u/49662722?s=400&u=f0bcc9ee748892048588a2907eb3f176b91a1084&v=4' alt='logo'></div></a><div class="sidebar-elems"><p class='location'><a href='../../index.html'>libslide</a>::<wbr><a href='../index.html'>partial_evaluator</a>::<wbr><a href='index.html'>flatten</a></p><script>window.sidebarCurrent = {name: 'flatten_mul_or_div', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../../src/libslide/partial_evaluator/flatten.rs.html#374-478' title='goto source code'>[src]</a></span><span class='in-band'>Function <a href='../../index.html'>libslide</a>::<wbr><a href='../index.html'>partial_evaluator</a>::<wbr><a href='index.html'>flatten</a>::<wbr><a class="fn" href=''>flatten_mul_or_div</a></span></h1><pre class='rust fn'>fn flatten_mul_or_div(o_lhs: <a class="struct" href="../../../libslide/grammar/intern/struct.RcExpr.html" title="struct libslide::grammar::intern::RcExpr">RcExpr</a>, o_rhs: <a class="struct" href="../../../libslide/grammar/intern/struct.RcExpr.html" title="struct libslide::grammar::intern::RcExpr">RcExpr</a>, is_div: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>) -&gt; <a class="struct" href="../../../libslide/grammar/intern/struct.RcExpr.html" title="struct libslide::grammar::intern::RcExpr">RcExpr</a></pre><div class='docblock'><p>Flattens a multiplication or division, folding constants and like terms as far as possible.
+The flattened expression is always normalized to a multiplication.</p>
+<pre><code class="language-text">10 * 2x / 5 / 2 / 4x -&gt; x^2/2
+</code></pre>
+<h1 id="how-this-is-done" class="section-header"><a href="#how-this-is-done">How this is done</a></h1>
+<p>Consider the expression <code>x*2/y/(5/(x/y)) ~ (/ (/ (* x 2) y) (/ 5 (/ x y)))</code>. If they can be
+unrolled to a series of terms <code>*x, *2, /y, /5, *x, /y</code>, all we have to do is combine like terms
+and constants, and we're done. Turns out the trickier, and more interesting part, is exactly how
+to unfold the expression. (There's a reason our example is mostly division.)</p>
+<blockquote>
+<p>Note that the flattening process does <em>not</em> play with commutativity; doing so would never
+correct.</p>
+</blockquote>
+<p>First, let's assume we've unfolded all subexpressions. This means that all subexpressions will
+be in multiplicative form; in particular, the example above becomes</p>
+<pre><code class="language-text">x*2*(1/y)/(5*(1/(x*(1/y)))) ~ (/ (* (* x 2) (/ 1 y)) (* 5 (/ 1 (* x (/ 1 y)))))
+</code></pre>
+<p>As we unfold subexpressions, we attach their operands to a double-ended list. The left side of
+the list represents terms that should be multiplied in the final expression, and the right side
+represents terms that should be divided. Initially this is just the LHS and RHS of the top
+level expression. We also keep a registry of unfoldable terms and a variable to fold constants
+into. In our example, this initially looks like</p>
+<pre><code class="language-text">          mul                       div                    registry       const
+----------------------||----------------------------
+| (* (* x 2) (/ 1 y)) || (* 5 (/ 1 (* x (/ 1 y)))) |           ∅            1
+----------------------||----------------------------
+                      ^^-- pivot
+</code></pre>
+<p>Now we go down the list and unfold any binary expression we see, or add fully-unfolded terms to
+the registry.</p>
+<p>We always handle the &quot;multiplication&quot; side first.</p>
+<h2 id="multiplication-side" class="section-header"><a href="#multiplication-side">Multiplication side</a></h2>
+<p>This part is pretty straightforward. When we see a multiplication, we just add both operand to
+the front of the list. Unfolding <code>(* (* x 2) (/ 1 y))</code>, we get</p>
+<pre><code class="language-text">          mul                       div                  registry       const
+--------------------||----------------------------
+| (* x 2) | (/ 1 y) || (* 5 (/ 1 (* x (/ 1 y)))) |           ∅            1
+--------------------||----------------------------
+</code></pre>
+<p>Which unfolds to</p>
+<pre><code class="language-text">          mul                   div                    registry       const
+------------------||----------------------------
+| x | 2 | (/ 1 y) || (* 5 (/ 1 (* x (/ 1 y)))) |           ∅            1
+------------------||----------------------------
+</code></pre>
+<p>In the next two steps see an unfoldable and a constant, which we add to the registry an fold
+accordingly.</p>
+<pre><code class="language-text">   mul                  div                    registry       const
+----------||----------------------------
+| (/ 1 y) || (* 5 (/ 1 (* x (/ 1 y)))) |        {x: 1}          2
+----------||----------------------------            ^-- mul: +1, div: -1 for this field
+</code></pre>
+<p>When we see a division, we add the first operand to the multiplication side and the second
+operand to the division side.</p>
+<pre><code class="language-text"> mul                div                    registry       const
+----||--------------------------------
+| 1 || (* 5 (/ 1 (* x (/ 1 y)))) | y |      {x: 1}          2
+----||--------------------------------
+</code></pre>
+<p>Folding the last term, we only get the division side remaining.</p>
+<pre><code class="language-text">m                div                    registry       const
+-||--------------------------------
+||| (* 5 (/ 1 (* x (/ 1 y)))) | y |      {x: 1}          2
+-||--------------------------------
+</code></pre>
+<h2 id="division-side" class="section-header"><a href="#division-side">Division side</a></h2>
+<p>This part is a bit trickier because we need to handle nested divisions, which may be equivalent
+to multiplications on the top level. Maybe it's already clear how to do this; if not, we'll get
+to it in a bit.</p>
+<p>First, let's unfold the first multiplication on the division side by adding both operands to
+the division side.</p>
+<blockquote>
+<p>To understand why this work, observe that <code>1 / (2 * 3)</code> is equivalent to <code>(1 / 2) / 3</code>.</p>
+</blockquote>
+<pre><code class="language-text">m                div                  registry       const
+-||------------------------------
+||| y | 5 | (/ 1 (* x (/ 1 y))) |      {x: 1}          2
+-||------------------------------
+</code></pre>
+<p>The next two terms are added to the registry and constant-folded, respectively.</p>
+<pre><code class="language-text">m           div                  registry       const
+-||----------------------
+||| (/ 1 (* x (/ 1 y))) |      {x: 1, y: -1}     2/5
+-||----------------------
+</code></pre>
+<p>Now we see a division <code>A</code> on the division side. This is the same thing as multiplying the
+reciprocal of <code>A</code> on the top level!</p>
+<blockquote>
+<p>Let's break down a simpler example. Observe that <code>1 / (2 / 3)</code> is equivalent to <code>3 / 2</code>. The
+flattening list for <code>1 / (2 / 3)</code> after the folding of <code>1</code> looks like</p>
+<pre><code class="language-text">m     div       const
+-||----------
+||| (/ 2 3) |     1
+-||----------
+</code></pre>
+<p>Now we simply add the reciprocal of the division expression to the multiplication side.</p>
+<pre><code class="language-text">    mul     d   const
+----------||-
+| (/ 3 2) |||     1
+----------||-
+</code></pre>
+<p>And we already know this gets unfolded as</p>
+<pre><code class="language-text"> mul  div   const
+----||----
+| 3 || 2 |    1
+----||----
+</code></pre>
+<p>So we can skip adding the entire division to the multiplication side, instead adding the
+operands where appropriate. The rest of the constant folding follows trivially.</p>
+</blockquote>
+<p>Back to the original example, whose current state is</p>
+<pre><code class="language-text">m           div                  registry       const
+-||----------------------
+||| (/ 1 (* x (/ 1 y))) |      {x: 1, y: -1}     2/5
+-||----------------------
+</code></pre>
+<p>Let's apply our &quot;division in division&quot; algorithm: the left operand gets divided, and the right
+operand gets multiplied.</p>
+<pre><code class="language-text">      mul         div         registry       const
+----------------||----
+| (* x (/ 1 y)) || 1 |      {x: 1, y: -1}     2/5
+----------------||----
+</code></pre>
+<p>Now we unfold the new expressions on the multiplication side.</p>
+<pre><code class="language-text">     mul        div         registry       const
+--------------||----
+| x | (/ 1 y) || 1 |      {x: 1, y: -1}     2/5
+--------------||----
+</code></pre>
+<p>Two steps this time:</p>
+<pre><code class="language-text"> mul    div           registry       const
+----||--------
+| 1 || 1 | y |      {x: 2, y: -1}     2/5
+----||--------
+</code></pre>
+<p>Three steps this time:</p>
+<pre><code class="language-text">m  d        registry       const
+-||-
+||||      {x: 2, y: -2}     2/5
+-||-
+</code></pre>
+<p>And now, all that needs to be done is to construct the flattened expression <code>2/5 * x^2 / y^-2</code>.</p>
+</div></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "libslide";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

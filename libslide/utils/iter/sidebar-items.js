@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["PeekIter","An iterator that supports arbitrary-length peeking."],["PeekingTakeWhile","A [`TakeWhile`]-like struct that tests a predicate by peeking rather than consuming an iterator."]]});
