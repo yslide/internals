@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["AssignmentOp",""],["Expr",""],["Stmt","A statement in a slide program."]],"struct":[["Assignment",""],["StmtList","A list of statements in a slide program."],["StmtListIterator",""]]});
+initSidebarItems({"enum":[["AssignmentOp",""],["Expr",""],["StmtKind","The kind of a statement."]],"struct":[["Assignment",""],["Stmt","A statement in a slide program."],["StmtList","A list of statements in a slide program."],["StmtListIterator",""]]});
