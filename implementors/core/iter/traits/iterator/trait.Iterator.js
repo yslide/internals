@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["libslide"] = [{"text":"impl Iterator for StmtListIterator","synthetic":false,"types":[]},{"text":"impl&lt;'a, T, P&gt; Iterator for PeekingTakeWhile&lt;'a, T, P&gt; <span class=\"where fmt-newline\">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: Clone + 'a,<br>&nbsp;&nbsp;&nbsp;&nbsp;P: Fn(&amp;T) -&gt; bool,&nbsp;</span>","synthetic":false,"types":[]},{"text":"impl&lt;T&gt; Iterator for PeekIter&lt;T&gt; <span class=\"where fmt-newline\">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: Clone,&nbsp;</span>","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

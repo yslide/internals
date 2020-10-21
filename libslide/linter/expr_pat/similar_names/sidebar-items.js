@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["NameKind",""]],"struct":[["NameCollection",""],["SimilarNamesLinter",""]]});

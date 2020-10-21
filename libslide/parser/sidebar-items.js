@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["unclosed_delimiter","Returns a diagnostic for an unclosed delimiter."]],"mod":[["errors","Diagnostic errors produced by the parser."],["expression_pattern_parser",""],["statement_parser",""]],"struct":[["ParseResult","Describes the result of parsing a slide program."]],"trait":[["Parser",""]]});

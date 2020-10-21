@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["libslide"] = [{"text":"impl&lt;'_&gt; TryFrom&lt;&amp;'_ Token&gt; for BinaryOperator","synthetic":false,"types":[]},{"text":"impl&lt;'_&gt; TryFrom&lt;&amp;'_ Token&gt; for UnaryOperator","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

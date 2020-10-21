@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["EagerVariableExpander","Eagerly expands variables in an expression."],["LazyVariableExpander","Lazily expands variables in an expression."]],"trait":[["VariableExpander",""]]});

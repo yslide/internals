@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["PEValidator",""]],"fn":[["validate",""]],"mod":[["incompatible_definitions","Detects incompatible variable definitions in a slide program."]],"trait":[["Validator",""]]});

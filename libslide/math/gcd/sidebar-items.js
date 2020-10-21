@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["binary_gcd","The Binary GCD algorithm, or Stein's algorithm. Implemented ∀ (u, v) ∈ (Z, Z)."],["euclidean_gcd","The Euclidean GCD algorithm. Implemented ∀ (u, v) ∈ (Z, Z)."],["gcd","Calculates the GCD for (u, v) ∈ (Z, Z)."]]});

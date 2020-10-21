@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["libslide"] = [{"text":"impl Deref for INTERNED_STRS","synthetic":false,"types":[]},{"text":"impl Deref for EMPTY_STR","synthetic":false,"types":[]},{"text":"impl Deref for RcExpr","synthetic":false,"types":[]},{"text":"impl Deref for RcExprPat","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

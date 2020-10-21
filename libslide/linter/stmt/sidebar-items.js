@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["StmtLintRule","A lint rule applying to a statement in a slide program."]],"mod":[["homogenous_assignment",""],["redundant_nesting",""],["unary_series",""]]});

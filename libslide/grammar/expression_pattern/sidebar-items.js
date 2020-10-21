@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["ExprPat","A slide expression pattern."]]});
